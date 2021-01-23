@@ -110,6 +110,8 @@ def construct_model(model, num_classes=10, seed=None, num_channels=3, modelkey=N
         model = ResNet(torchvision.models.resnet.BasicBlock, [18, 18, 18], num_classes=num_classes, base_width=16)
     elif model == 'ResNet18':
         model = ResNet(torchvision.models.resnet.BasicBlock, [2, 2, 2, 2], num_classes=num_classes, base_width=64)
+    elif model == 'MnistResNet18':
+        model = MnistResNet()
     elif model == 'ResNet34':
         model = ResNet(torchvision.models.resnet.BasicBlock, [3, 4, 6, 3], num_classes=num_classes, base_width=64)
     elif model == 'ResNet50':
@@ -170,6 +172,14 @@ def construct_model(model, num_classes=10, seed=None, num_channels=3, modelkey=N
     print(f'Model initialized with random key {model_init_seed}.')
     return model, model_init_seed
 
+class MnistResNet(torchvision.models.ResNet):
+
+    def __init__(self):
+        super().__init__(torchvision.models.resnet.BasicBlock, [2, 2, 2, 2], num_classes=10)
+        self.conv1 = torch.nn.Conv2d(1, 64, 
+            kernel_size=(7, 7), 
+            stride=(2, 2), 
+            padding=(3, 3), bias=False)
 
 class ResNet(torchvision.models.ResNet):
     """ResNet generalization for CIFAR thingies."""
